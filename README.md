@@ -15,6 +15,7 @@ api_auto_test/
 │   ├── routes/       # 五大业务模块路由
 │   ├── seed.py       # 种子数据
 │   └── docs/         # 接口文档
+├── api/               # 业务层：接口对象封装（User/Product/Cart/Order/Admin）
 ├── core/             # 测试框架核心层
 │   ├── config.py     # 环境配置加载（--env 切换 dev/test）
 │   ├── logger.py     # 日志（控制台 + 文件）
@@ -30,7 +31,7 @@ api_auto_test/
 
 - [x] P0 商城 Mock 服务（接口文档见 `mock_server/docs/api.md`）
 - [x] P1 框架骨架（请求封装/日志/配置/断言工具，冒烟用例跑通）
-- [ ] P2 接口对象 + 单接口用例
+- [x] P2 接口对象 + 单接口用例（五大模块 84 条正反场景用例，接口全覆盖）
 - [ ] P3 数据驱动
 - [ ] P4 全链路场景用例
 - [ ] P5 Allure 报告
