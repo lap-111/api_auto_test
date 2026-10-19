@@ -35,6 +35,8 @@ def create_order():
     """从购物车下单：可选 cart_item_ids 指定项，默认全部。下单扣减库存并清空对应购物车项"""
     data = request.get_json(silent=True) or {}
     cart_item_ids = data.get("cart_item_ids")
+    if cart_item_ids is not None and not isinstance(cart_item_ids, list):
+        return jsonify(fail(Err.PARAM_ERROR, "cart_item_ids 需为数组")), 400
 
     query = CartItem.query.filter_by(user_id=g.user_id)
     if cart_item_ids:

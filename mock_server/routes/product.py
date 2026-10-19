@@ -10,8 +10,9 @@ product_bp = Blueprint("product", __name__, url_prefix="/api/products")
 @product_bp.get("")
 def list_products():
     """商品列表：page/page_size 分页，category 分类筛选，keyword 名称模糊搜索；仅返回上架商品"""
-    page = request.args.get("page", 1, type=int)
-    page_size = request.args.get("page_size", 10, type=int)
+    # 分页边界约束：page>=1，page_size 限制在 1-100
+    page = max(1, request.args.get("page", 1, type=int) or 1)
+    page_size = max(1, min(request.args.get("page_size", 10, type=int) or 10, 100))
     category = request.args.get("category", "").strip()
     keyword = request.args.get("keyword", "").strip()
 

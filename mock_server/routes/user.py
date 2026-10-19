@@ -13,9 +13,14 @@ user_bp = Blueprint("user", __name__, url_prefix="/api/users")
 def register():
     """注册：username/password 必填，nickname 可选"""
     data = request.get_json(silent=True) or {}
-    username = (data.get("username") or "").strip()
-    password = data.get("password") or ""
-    nickname = (data.get("nickname") or "").strip()
+    username = data.get("username")
+    password = data.get("password")
+    nickname = data.get("nickname")
+
+    if not isinstance(username, str) or not isinstance(password, str):
+        return jsonify(fail(Err.PARAM_ERROR, "用户名和密码必须为字符串")), 400
+    username = username.strip()
+    nickname = nickname.strip() if isinstance(nickname, str) else ""
 
     if not username or not password:
         return jsonify(fail(Err.PARAM_ERROR, "用户名和密码不能为空")), 400
@@ -37,8 +42,11 @@ def register():
 def login():
     """登录：校验通过返回 token"""
     data = request.get_json(silent=True) or {}
-    username = (data.get("username") or "").strip()
-    password = data.get("password") or ""
+    username = data.get("username")
+    password = data.get("password")
+    if not isinstance(username, str) or not isinstance(password, str):
+        return jsonify(fail(Err.PARAM_ERROR, "用户名和密码必须为字符串")), 400
+    username = username.strip()
     if not username or not password:
         return jsonify(fail(Err.PARAM_ERROR, "用户名和密码不能为空")), 400
 
@@ -65,9 +73,10 @@ def get_me():
 def update_me():
     """修改当前用户资料（昵称）"""
     data = request.get_json(silent=True) or {}
-    nickname = (data.get("nickname") or "").strip()
-    if not nickname:
+    nickname = data.get("nickname")
+    if not isinstance(nickname, str) or not nickname.strip():
         return jsonify(fail(Err.PARAM_ERROR, "昵称不能为空")), 400
+    nickname = nickname.strip()
     user = User.query.get(g.user_id)
     user.nickname = nickname
     db.session.commit()

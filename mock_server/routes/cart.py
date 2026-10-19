@@ -16,8 +16,8 @@ def add_item():
     product_id = data.get("product_id")
     quantity = data.get("quantity", 1)
 
-    if not product_id or not isinstance(quantity, int) or quantity < 1:
-        return jsonify(fail(Err.PARAM_ERROR, "参数错误：product_id 必填，quantity 需为正整数")), 400
+    if not isinstance(product_id, int) or not isinstance(quantity, int) or quantity < 1:
+        return jsonify(fail(Err.PARAM_ERROR, "参数错误：product_id 需为整数，quantity 需为正整数")), 400
 
     product = Product.query.get(product_id)
     if not product:

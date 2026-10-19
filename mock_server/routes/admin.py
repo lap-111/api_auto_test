@@ -27,10 +27,14 @@ def admin_login():
 def create_product():
     """新增商品"""
     data = request.get_json(silent=True) or {}
-    name = (data.get("name") or "").strip()
+    raw_name = data.get("name")
     price = data.get("price")
     stock = data.get("stock")
-    category = (data.get("category") or "").strip()
+    raw_category = data.get("category")
+    if not isinstance(raw_name, str) or not isinstance(raw_category, str):
+        return jsonify(fail(Err.PARAM_ERROR, "name/category 必须为字符串")), 400
+    name = raw_name.strip()
+    category = raw_category.strip()
     if not name or not isinstance(price, (int, float)) or price <= 0 \
             or not isinstance(stock, int) or stock < 0 or not category:
         return jsonify(fail(Err.PARAM_ERROR, "参数错误：name/price/category 必填，stock 需为非负整数")), 400
@@ -48,7 +52,7 @@ def update_product_status(product_id):
     """上架(on)/下架(off)商品"""
     data = request.get_json(silent=True) or {}
     status = data.get("status")
-    if status not in ("on", "off"):
+    if not isinstance(status, str) or status not in ("on", "off"):
         return jsonify(fail(Err.PARAM_ERROR, "status 需为 on 或 off")), 400
     product = Product.query.get(product_id)
     if not product:
