@@ -1,8 +1,10 @@
 """购物车模块接口对象"""
-from .base_api import BaseApi
 
 
-class CartApi(BaseApi):
+class CartApi:
+
+    def __init__(self, client):
+        self.client = client
 
     def add_item(self, product_id, quantity=1):
         """加购"""

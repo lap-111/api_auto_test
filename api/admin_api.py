@@ -1,8 +1,10 @@
 """后台管理接口对象"""
-from .base_api import BaseApi
 
 
-class AdminApi(BaseApi):
+class AdminApi:
+
+    def __init__(self, client):
+        self.client = client
 
     def login(self, username, password):
         """管理员登录"""

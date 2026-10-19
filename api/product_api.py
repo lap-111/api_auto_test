@@ -1,8 +1,10 @@
 """商品模块接口对象"""
-from .base_api import BaseApi
 
 
-class ProductApi(BaseApi):
+class ProductApi:
+
+    def __init__(self, client):
+        self.client = client
 
     def list_products(self, page=1, page_size=10, category=None, keyword=None):
         """商品列表（分页/分类/搜索）"""

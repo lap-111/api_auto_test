@@ -1,8 +1,10 @@
 """订单模块接口对象"""
-from .base_api import BaseApi
 
 
-class OrderApi(BaseApi):
+class OrderApi:
+
+    def __init__(self, client):
+        self.client = client
 
     def create_order(self, cart_item_ids=None):
         """下单（默认全部购物车项）"""

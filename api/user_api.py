@@ -1,8 +1,10 @@
 """用户模块接口对象"""
-from .base_api import BaseApi
 
 
-class UserApi(BaseApi):
+class UserApi:
+
+    def __init__(self, client):
+        self.client = client
 
     def register(self, username, password, nickname=None):
         """注册"""
