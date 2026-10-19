@@ -1,0 +1,78 @@
+# API 自动化回归：推送 / 每日定时触发，测试并部署 Allure 报告到 GitHub Pages
+name: api-auto-test
+
+"on": # 加引号避免 YAML 1.1 将 on 解析为布尔值
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 2 * * *" # 每天 UTC 02:00（北京时间 10:00）
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  test:
+    name: 运行接口回归
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: 安装依赖
+        run: pip install -r requirements.txt
+
+      - name: 启动 Mock 商城服务
+        run: |
+          python -m mock_server.app &
+          for i in $(seq 1 30); do
+            if curl -s -o /dev/null http://127.0.0.1:5000/api/health; then
+              echo "Mock 服务已就绪"
+              break
+            fi
+            sleep 1
+          done
+          curl -s http://127.0.0.1:5000/api/health
+
+      - name: 运行全量回归测试
+        run: python -m pytest --alluredir=allure-results --clean-alluredir
+
+      - name: 上传 Allure 结果
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
+          if-no-files-found: error
+
+  report:
+    name: 生成并部署报告
+    needs: test
+    runs-on: ubuntu-latest
+    if: always() # 测试失败也生成报告，便于查看失败详情
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
+
+      - uses: allure-framework/setup-allure@v1
+        with:
+          version: "2.30.0"
+
+      - name: 生成 Allure 报告
+        run: |
+          allure generate allure-results -o _site --clean
+          touch _site/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deploy
+        uses: actions/deploy-pages@v4

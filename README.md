@@ -38,7 +38,15 @@ api_auto_test/
 - [x] P3 数据驱动（YAML 用例数据 + pytest 参数化，参数用例数据与代码分离）
 - [x] P4 全链路场景用例（完整购物流程/订单状态机/多用户隔离/支付与下架场景，数据工厂造数）
 - [x] P5 Allure 报告（feature/story 组织 + 失败自动挂载请求报文，`report/` 可查看）
-- [ ] P6 CI 集成
+- [x] P6 CI 集成（GitHub Actions：push/每日定时触发回归，报告自动部署 GitHub Pages）
+
+## 持续集成（GitHub Actions）
+
+工作流见 `.github/workflows/ci.yml`：
+
+- 触发方式：push 到 main / 每天 UTC 02:00 定时 / 手动触发
+- 流程：安装依赖 → 启动 Mock 服务 → 跑全量回归（生成 Allure 结果）→ 上传产物 → 生成 HTML 报告 → 部署到 GitHub Pages
+- 报告地址：`https://<你的用户名>.github.io/<仓库名>/`（需在仓库 Settings → Pages 中设置 Source 为 GitHub Actions）
 
 ## 启动 Mock 服务
 
