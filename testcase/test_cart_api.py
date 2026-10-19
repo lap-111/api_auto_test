@@ -10,19 +10,6 @@ pytestmark = pytest.mark.regression
 
 class TestAddItem:
 
-    def test_add_success(self, auth_client, cart_api):
-        """正向：加购成功"""
-        resp = cart_api.add_item(product_id=5, quantity=2)
-        assert_ok(resp)
-        assert_data_field(resp, "product_id", 5)
-        assert_data_field(resp, "quantity", 2)
-
-    def test_add_default_quantity(self, auth_client, cart_api):
-        """默认数量为 1"""
-        resp = cart_api.add_item(product_id=5)
-        assert_ok(resp)
-        assert_data_field(resp, "quantity", 1)
-
     def test_add_unauthorized(self, client, cart_api):
         """未授权返回 401/1002"""
         client.set_token(None)
@@ -30,36 +17,8 @@ class TestAddItem:
         assert_http_status(resp, 401)
         assert_code(resp, 1002)
 
-    def test_add_missing_product_id(self, auth_client):
-        """参数缺失返回 400/1001"""
-        resp = auth_client.post("/api/cart/items", json={"quantity": 1})
-        assert_http_status(resp, 400)
-        assert_code(resp, 1001)
-
-    def test_add_type_error(self, auth_client):
-        """类型错误：product_id 传字符串返回 400/1001"""
-        resp = auth_client.post("/api/cart/items", json={"product_id": "abc", "quantity": 1})
-        assert_http_status(resp, 400)
-        assert_code(resp, 1001)
-
-    def test_add_quantity_zero(self, auth_client, cart_api):
-        """边界值：quantity=0 返回 400/1001"""
-        resp = cart_api.add_item(product_id=5, quantity=0)
-        assert_http_status(resp, 400)
-        assert_code(resp, 1001)
-
-    def test_add_stock_exceed(self, auth_client, cart_api):
-        """边界值：加购数量超过库存返回 3003"""
-        resp = cart_api.add_item(product_id=1, quantity=1000)
-        assert_code(resp, 3003)
-
-    def test_add_product_not_found(self, auth_client, cart_api):
-        """商品不存在返回 3001"""
-        resp = cart_api.add_item(product_id=999999, quantity=1)
-        assert_code(resp, 3001)
-
     def test_add_off_shelf_product(self, auth_client, cart_api, admin_api):
-        """已下架商品加购返回 3002"""
+        """已下架商品加购返回 3002（多步交互场景）"""
         user_token = auth_client.token
         resp = admin_api.login("admin", "admin123")
         auth_client.set_token(resp.data["token"])

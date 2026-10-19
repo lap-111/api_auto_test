@@ -20,8 +20,10 @@ api_auto_test/
 │   ├── config.py     # 环境配置加载（--env 切换 dev/test）
 │   ├── logger.py     # 日志（控制台 + 文件）
 │   ├── http_client.py# 请求封装（统一响应/token 注入/重试）
-│   └── assert_utils.py # 断言工具（状态码/code/字段/类型/长度）
+│   ├── assert_utils.py # 断言工具（状态码/code/字段/类型/长度）
+│   └── data_loader.py  # YAML 数据驱动加载器（占位符解析）
 ├── config/           # YAML 环境配置
+├── data/             # YAML 用例数据（login/register/product_list/cart_add）
 ├── testcase/         # 用例层（pytest）
 ├── conftest.py       # 全局 fixture（config/client）
 └── pytest.ini        # pytest 配置
@@ -32,7 +34,7 @@ api_auto_test/
 - [x] P0 商城 Mock 服务（接口文档见 `mock_server/docs/api.md`）
 - [x] P1 框架骨架（请求封装/日志/配置/断言工具，冒烟用例跑通）
 - [x] P2 接口对象 + 单接口用例（五大模块 84 条正反场景用例，接口全覆盖）
-- [ ] P3 数据驱动
+- [x] P3 数据驱动（YAML 用例数据 + pytest 参数化，参数用例数据与代码分离）
 - [ ] P4 全链路场景用例
 - [ ] P5 Allure 报告
 - [ ] P6 CI 集成
