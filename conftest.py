@@ -5,6 +5,7 @@ import pytest
 
 from api import AdminApi, CartApi, OrderApi, ProductApi, UserApi
 from core.config import Config
+from core.factory import Factory
 from core.http_client import HttpClient
 
 
@@ -47,6 +48,12 @@ def order_api(client):
 @pytest.fixture(scope="session")
 def admin_api(client):
     return AdminApi(client)
+
+
+@pytest.fixture
+def factory(user_api, admin_api, product_api, cart_api, order_api):
+    """场景用例数据工厂：造数与多用户登录态切换"""
+    return Factory(user_api, admin_api, product_api, cart_api, order_api)
 
 
 @pytest.fixture
