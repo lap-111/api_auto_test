@@ -1,0 +1,11 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+
+# 运行时产物
+mock_server/mall.db
+allure-results/
+report/
+logs/
