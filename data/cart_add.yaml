@@ -1,0 +1,35 @@
+# 加购接口数据驱动用例（需登录）
+cases:
+  - name: 加购成功
+    request: { product_id: 5, quantity: 2 }
+    expect:
+      code: 0
+      data_eq: { product_id: 5, quantity: 2 }
+  - name: 默认数量为1
+    request: { product_id: 5 }
+    expect:
+      code: 0
+      data_eq: { quantity: 1 }
+  - name: 缺少product_id
+    request: { quantity: 1 }
+    expect:
+      status: 400
+      code: 1001
+  - name: product_id类型错误
+    request: { product_id: abc, quantity: 1 }
+    expect:
+      status: 400
+      code: 1001
+  - name: 数量为0
+    request: { product_id: 5, quantity: 0 }
+    expect:
+      status: 400
+      code: 1001
+  - name: 加购超过库存
+    request: { product_id: 1, quantity: 1000 }
+    expect:
+      code: 3003
+  - name: 商品不存在
+    request: { product_id: 999999, quantity: 1 }
+    expect:
+      code: 3001

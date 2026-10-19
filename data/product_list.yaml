@@ -1,0 +1,50 @@
+# 商品列表接口数据驱动用例
+cases:
+  - name: 默认分页
+    params: {}
+    expect:
+      code: 0
+      data_eq: { page: 1, page_size: 10 }
+      data_not_null: [ items ]
+  - name: 分页每页5条
+    params: { page: 1, page_size: 5 }
+    expect:
+      code: 0
+      data_eq: { page_size: 5 }
+      data_length: { items: 5 }
+  - name: 超大页码返回空
+    params: { page: 999 }
+    expect:
+      code: 0
+      data_length: { items: 0 }
+  - name: page为0被约束为1
+    params: { page: 0 }
+    expect:
+      code: 0
+      data_eq: { page: 1 }
+  - name: page_size为负被约束为1
+    params: { page_size: -1 }
+    expect:
+      code: 0
+      data_eq: { page_size: 1 }
+  - name: 关键字搜索命中
+    params: { keyword: iPhone }
+    expect:
+      code: 0
+      data_gt: { total: 0 }
+  - name: 关键字搜索无命中
+    params: { keyword: 不存在商品xyz }
+    expect:
+      code: 0
+      data_eq: { total: 0 }
+      data_length: { items: 0 }
+  - name: 分类筛选命中
+    params: { category: 手机 }
+    expect:
+      code: 0
+      data_gt: { total: 1 }
+  - name: 分类筛选无命中
+    params: { category: 不存在分类 }
+    expect:
+      code: 0
+      data_eq: { total: 0 }

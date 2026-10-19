@@ -1,0 +1,33 @@
+# 注册接口数据驱动用例
+cases:
+  - name: 注册成功
+    request: { username: "{random_username}", password: "abc123" }
+    expect:
+      code: 0
+      data_eq: { balance: 10000, role: user }
+      data_not_null: [ id ]
+  - name: 用户名过短
+    request: { username: ab, password: "abc123" }
+    expect:
+      status: 400
+      code: 1001
+  - name: 用户名过长
+    request: { username: "{random_hex:21}", password: "abc123" }
+    expect:
+      status: 400
+      code: 1001
+  - name: 密码过短
+    request: { username: "{random_username}", password: "12345" }
+    expect:
+      status: 400
+      code: 1001
+  - name: 参数缺失
+    request: { username: "", password: "" }
+    expect:
+      status: 400
+      code: 1001
+  - name: 用户名类型错误
+    request: { username: 12345, password: "abc123" }
+    expect:
+      status: 400
+      code: 1001
