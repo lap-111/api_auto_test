@@ -1,0 +1,14 @@
+# 测试框架配置
+envs:
+  dev:
+    base_url: "http://127.0.0.1:5000"
+    timeout: 10
+    accounts:
+      admin: { username: "admin", password: "admin123" }
+      user01: { username: "user01", password: "123456" }
+  test:
+    base_url: "http://127.0.0.1:5000"
+    timeout: 10
+    accounts:
+      admin: { username: "admin", password: "admin123" }
+      user01: { username: "user01", password: "123456" }

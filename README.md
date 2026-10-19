@@ -15,13 +15,21 @@ api_auto_test/
 │   ├── routes/       # 五大业务模块路由
 │   ├── seed.py       # 种子数据
 │   └── docs/         # 接口文档
-└── (后续阶段新增测试框架目录)
+├── core/             # 测试框架核心层
+│   ├── config.py     # 环境配置加载（--env 切换 dev/test）
+│   ├── logger.py     # 日志（控制台 + 文件）
+│   ├── http_client.py# 请求封装（统一响应/token 注入/重试）
+│   └── assert_utils.py # 断言工具（状态码/code/字段/类型/长度）
+├── config/           # YAML 环境配置
+├── testcase/         # 用例层（pytest）
+├── conftest.py       # 全局 fixture（config/client）
+└── pytest.ini        # pytest 配置
 ```
 
 ## 当前进度
 
 - [x] P0 商城 Mock 服务（接口文档见 `mock_server/docs/api.md`）
-- [ ] P1 框架骨架
+- [x] P1 框架骨架（请求封装/日志/配置/断言工具，冒烟用例跑通）
 - [ ] P2 接口对象 + 单接口用例
 - [ ] P3 数据驱动
 - [ ] P4 全链路场景用例
