@@ -1,4 +1,5 @@
 """订单模块单接口用例"""
+import allure
 import pytest
 
 from core.assert_utils import (assert_code, assert_data_field, assert_field_exists,
@@ -14,6 +15,8 @@ def _add_and_order(cart_api, order_api, product_id=5, quantity=1):
     return order_api.create_order()
 
 
+@allure.feature("订单模块")
+@allure.story("下单")
 class TestCreateOrder:
 
     def test_create_success(self, auth_client, cart_api, order_api):
@@ -73,6 +76,8 @@ class TestCreateOrder:
         auth_client.set_token(user_token)
 
 
+@allure.feature("订单模块")
+@allure.story("订单列表")
 class TestListOrders:
 
     def test_list_success(self, auth_client, cart_api, order_api):
@@ -92,6 +97,8 @@ class TestListOrders:
         assert_length(resp, "items", 0)
 
 
+@allure.feature("订单模块")
+@allure.story("订单详情")
 class TestGetOrder:
 
     def test_get_success(self, auth_client, cart_api, order_api):
@@ -120,6 +127,8 @@ class TestGetOrder:
         auth_client.set_token(token)
 
 
+@allure.feature("订单模块")
+@allure.story("支付")
 class TestPayOrder:
 
     def test_pay_success(self, auth_client, cart_api, order_api, user_api):
@@ -159,6 +168,8 @@ class TestPayOrder:
         assert_code(resp, 5001)
 
 
+@allure.feature("订单模块")
+@allure.story("取消")
 class TestCancelOrder:
 
     def test_cancel_success(self, auth_client, cart_api, order_api, product_api):
@@ -186,6 +197,8 @@ class TestCancelOrder:
         assert_code(resp, 5002)
 
 
+@allure.feature("订单模块")
+@allure.story("确认收货")
 class TestConfirmOrder:
 
     def test_confirm_success(self, auth_client, cart_api, order_api):

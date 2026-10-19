@@ -1,4 +1,5 @@
 """数据驱动用例：参数从 data/*.yaml 加载，用例数据与代码分离"""
+import allure
 import pytest
 
 from core.assert_utils import (assert_code, assert_data_field, assert_field_exists,
@@ -27,6 +28,8 @@ def _assert_case(resp, expect):
         assert_greater(resp, field, value)
 
 
+@allure.feature("数据驱动")
+@allure.story("登录用例")
 @pytest.mark.regression
 class TestLoginData:
 
@@ -37,6 +40,8 @@ class TestLoginData:
         _assert_case(resp, case["expect"])
 
 
+@allure.feature("数据驱动")
+@allure.story("注册用例")
 @pytest.mark.regression
 class TestRegisterData:
 
@@ -47,6 +52,8 @@ class TestRegisterData:
         _assert_case(resp, case["expect"])
 
 
+@allure.feature("数据驱动")
+@allure.story("商品列表用例")
 @pytest.mark.regression
 class TestProductListData:
 
@@ -57,6 +64,8 @@ class TestProductListData:
         _assert_case(resp, case["expect"])
 
 
+@allure.feature("数据驱动")
+@allure.story("加购用例")
 @pytest.mark.regression
 class TestCartAddData:
 

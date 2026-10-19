@@ -1,4 +1,5 @@
 """购物车模块单接口用例"""
+import allure
 import pytest
 
 from core.assert_utils import (assert_code, assert_data_field, assert_field_exists,
@@ -8,6 +9,8 @@ from helpers import random_username
 pytestmark = pytest.mark.regression
 
 
+@allure.feature("购物车模块")
+@allure.story("加购")
 class TestAddItem:
 
     def test_add_unauthorized(self, client, cart_api):
@@ -29,6 +32,8 @@ class TestAddItem:
         assert_code(resp, 3002)
 
 
+@allure.feature("购物车模块")
+@allure.story("购物车列表")
 class TestGetCart:
 
     def test_get_success(self, auth_client, cart_api):
@@ -55,6 +60,8 @@ class TestGetCart:
         assert_code(resp, 1002)
 
 
+@allure.feature("购物车模块")
+@allure.story("修改数量")
 class TestUpdateItem:
 
     def test_update_success(self, auth_client, cart_api):
@@ -84,6 +91,8 @@ class TestUpdateItem:
         assert_code(resp, 1002)
 
 
+@allure.feature("购物车模块")
+@allure.story("删除")
 class TestRemoveItem:
 
     def test_remove_success(self, auth_client, cart_api):

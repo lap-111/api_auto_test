@@ -1,4 +1,5 @@
 """商品模块单接口用例"""
+import allure
 import pytest
 
 from core.assert_utils import (assert_code, assert_data_field, assert_field_exists,
@@ -7,6 +8,8 @@ from core.assert_utils import (assert_code, assert_data_field, assert_field_exis
 pytestmark = pytest.mark.regression
 
 
+@allure.feature("商品模块")
+@allure.story("商品详情")
 class TestGetProduct:
 
     def test_get_success(self, product_api):

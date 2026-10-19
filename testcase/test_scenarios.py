@@ -1,10 +1,13 @@
 """全链路场景用例：完整购物流程、订单状态机、多用户隔离、支付与下架场景"""
+import allure
 import pytest
 
 from core.assert_utils import assert_code, assert_ok
 from core.factory import TokenSwitch
 
 
+@allure.feature("全链路场景")
+@allure.story("完整购物流程")
 class TestBuyFlow:
     """核心购物链路（冒烟）"""
 
@@ -47,6 +50,8 @@ class TestBuyFlow:
             assert confirm.data["status"] == "completed"
 
 
+@allure.feature("全链路场景")
+@allure.story("订单状态机")
 class TestOrderStateMachine:
     """订单状态机流转（回归）"""
 
@@ -99,6 +104,8 @@ class TestOrderStateMachine:
             assert factory.product_api.get_product(5).data["stock"] == stock_before
 
 
+@allure.feature("全链路场景")
+@allure.story("多用户隔离")
 class TestMultiUser:
     """多用户数据隔离与越权（回归）"""
 
@@ -126,6 +133,8 @@ class TestMultiUser:
             assert factory.order_api.get_order(o1).data["items"][0]["product_id"] == 5
 
 
+@allure.feature("全链路场景")
+@allure.story("支付边界")
 class TestPayment:
     """支付边界场景（回归）"""
 
@@ -141,6 +150,8 @@ class TestPayment:
             assert_ok(factory.order_api.cancel_order(order_id))
 
 
+@allure.feature("全链路场景")
+@allure.story("商品上下架")
 class TestOffShelf:
     """商品上下架对购买链路的影响（回归）"""
 

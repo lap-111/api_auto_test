@@ -1,4 +1,5 @@
 """用户模块单接口用例"""
+import allure
 import pytest
 
 from core.assert_utils import (assert_code, assert_data_field, assert_field_exists,
@@ -8,6 +9,8 @@ from helpers import random_username
 pytestmark = pytest.mark.regression
 
 
+@allure.feature("用户模块")
+@allure.story("注册")
 class TestRegister:
 
     def test_register_duplicate(self, user_api):
@@ -22,6 +25,8 @@ class TestRegister:
         assert_ok(user_api.register(random_username(prefix="", length=3), "abc123"))
 
 
+@allure.feature("用户模块")
+@allure.story("用户信息")
 class TestGetMe:
 
     def test_get_me_success(self, auth_client, user_api):
@@ -46,6 +51,8 @@ class TestGetMe:
         assert_code(resp, 1002)
 
 
+@allure.feature("用户模块")
+@allure.story("修改资料")
 class TestUpdateMe:
 
     def test_update_me_success(self, auth_client, user_api):

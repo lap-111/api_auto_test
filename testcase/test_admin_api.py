@@ -1,4 +1,5 @@
 """后台管理模块单接口用例"""
+import allure
 import pytest
 
 from core.assert_utils import (assert_code, assert_data_field, assert_field_exists,
@@ -8,6 +9,8 @@ from helpers import random_username
 pytestmark = pytest.mark.regression
 
 
+@allure.feature("后台管理")
+@allure.story("管理员登录")
 class TestAdminLogin:
 
     def test_login_success(self, admin_api):
@@ -28,6 +31,8 @@ class TestAdminLogin:
         assert_code(resp, 1003)
 
 
+@allure.feature("后台管理")
+@allure.story("新增商品")
 class TestCreateProduct:
 
     def test_create_success(self, admin_client, admin_api):
@@ -78,6 +83,8 @@ class TestCreateProduct:
         assert_code(resp, 1003)
 
 
+@allure.feature("后台管理")
+@allure.story("上下架")
 class TestUpdateStatus:
 
     def test_off_shelf_success(self, admin_client, admin_api):
