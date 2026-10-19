@@ -37,7 +37,7 @@ api_auto_test/
 - [x] P2 接口对象 + 单接口用例（五大模块 84 条正反场景用例，接口全覆盖）
 - [x] P3 数据驱动（YAML 用例数据 + pytest 参数化，参数用例数据与代码分离）
 - [x] P4 全链路场景用例（完整购物流程/订单状态机/多用户隔离/支付与下架场景，数据工厂造数）
-- [ ] P5 Allure 报告
+- [x] P5 Allure 报告（feature/story 组织 + 失败自动挂载请求报文，`report/` 可查看）
 - [ ] P6 CI 集成
 
 ## 启动 Mock 服务
@@ -48,3 +48,13 @@ python -m mock_server.app
 ```
 
 默认地址 `http://127.0.0.1:5000`，种子账号：`admin/admin123`（管理员）、`user01/123456`（普通用户）。
+
+## 运行测试与生成报告
+
+```bash
+python -m pytest                    # 全量回归（自动产出 allure-results/）
+python -m pytest -m smoke           # 只跑冒烟用例
+allure generate allure-results -o report --clean   # 生成 HTML 报告
+```
+
+> Allure CLI 本地安装于 `C:\Users\lenovo\.cache\allure\allure-2.46.1\bin\allure.bat`（依赖 Java）。

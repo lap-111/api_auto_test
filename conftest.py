@@ -1,6 +1,7 @@
 """全局 pytest 配置与 fixture"""
 import uuid
 
+import allure
 import pytest
 
 from api import AdminApi, CartApi, OrderApi, ProductApi, UserApi
@@ -11,6 +12,25 @@ from core.http_client import HttpClient
 
 def pytest_addoption(parser):
     parser.addoption("--env", action="store", default="dev", help="指定测试环境: dev/test")
+
+
+def pytest_runtest_makereport(item, call):
+    """用例失败时，自动把最近一次请求/响应报文挂载到 Allure 报告"""
+    if call.when != "call" or call.excinfo is None:
+        return
+    client = item.funcargs.get("client")
+    if client is None:  # 未直接请求 client fixture 的用例，从接口对象上取
+        for name in ("user_api", "product_api", "cart_api", "order_api", "admin_api", "factory"):
+            obj = item.funcargs.get(name)
+            if obj is not None and hasattr(obj, "client"):
+                client = obj.client
+                break
+    if client is not None and getattr(client, "last_response_text", None):
+        allure.attach(
+            f"请求: {client.last_request_text}\n\n响应(HTTP {client.last_status}):\n{client.last_response_text}",
+            name="请求/响应报文",
+            attachment_type=allure.attachment_type.TEXT,
+        )
 
 
 @pytest.fixture(scope="session")

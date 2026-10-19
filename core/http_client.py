@@ -42,6 +42,10 @@ class HttpClient:
         self.session = requests.Session()
         self.logger = get_logger("http")
         self.token = None
+        # 最近一次请求/响应（供失败时挂载到 Allure 报告）
+        self.last_request_text = ""
+        self.last_response_text = ""
+        self.last_status = None
 
     def set_token(self, token):
         """设置登录态 token，后续请求自动携带"""
@@ -62,13 +66,17 @@ class HttpClient:
 
         for attempt in range(retry + 1):
             try:
-                self.logger.info(
-                    f"[{method}] {full_url} params={kwargs.get('params')} json={kwargs.get('json')}")
+                req_log = f"[{method}] {full_url} params={kwargs.get('params')} json={kwargs.get('json')}"
+                self.logger.info(req_log)
+                self.last_request_text = req_log
                 resp = self.session.request(method, full_url, **kwargs)
+                self.last_status = resp.status_code
+                self.last_response_text = resp.text
                 self.logger.info(f"<- {resp.status_code} {resp.text[:500]}")
                 if resp.status_code < 500:  # 5xx 才重试
                     return ApiResponse(resp)
             except requests.RequestException as e:
+                self.last_response_text = str(e)
                 self.logger.warning(f"[{method}] {full_url} 请求异常: {e}")
             if attempt < retry:
                 self.logger.info(f"第 {attempt + 1} 次重试: {full_url}")
