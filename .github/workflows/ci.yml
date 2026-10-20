@@ -61,13 +61,20 @@ jobs:
           name: allure-results
           path: allure-results
 
-      - uses: allure-framework/setup-allure@v1
+      - uses: actions/setup-java@v4
         with:
-          version: "2.30.0"
+          distribution: temurin
+          java-version: "17"
+
+      - name: 安装 Allure CLI（Maven Central）
+        run: |
+          curl -sL -o allure.zip https://repo1.maven.org/maven2/io/qameta/allure/allure-commandline/2.30.0/allure-commandline-2.30.0.zip
+          unzip -q allure.zip
+          rm allure.zip
 
       - name: 生成 Allure 报告
         run: |
-          allure generate allure-results -o _site --clean
+          ./allure-2.30.0/bin/allure generate allure-results -o _site --clean
           touch _site/.nojekyll
 
       - uses: actions/upload-pages-artifact@v3
